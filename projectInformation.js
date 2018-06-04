@@ -29,13 +29,13 @@ const JSON_Ctrl = (() => {
     // array of external references that may be added to the jsonData. did it this way so that i can demonstrate adding an array to json.
     // format: { "name": "name", "active": true or false, "type": "css or js", "tag": "link or script", "regex": "regex", "website": "website", "url": "url" }
     let externalFiles = [
-      { "name": "jQuery", "active": true, "type": "js", "tag": "script", "regex": "jquery", "website": "https://jquery.com/", "url": "https://code.jquery.com/jquery-3.3.1.min.js" },
+      { "name": "jQuery", "active": false, "type": "js", "tag": "script", "regex": "jquery-3.3.1.min.js", "website": "https://jquery.com/", "url": "https://code.jquery.com/jquery-3.3.1.min.js" },
       { "name": "WingCSS", "active": false, "type": "css", "tag": "link", "regex": "wingcss", "website": "http://usewing.ml/", "url": "https://unpkg.com/wingcss@1.0.0-beta/dist/wing.min.css" },
       { "name": "Normalize", "active": false, "type": "css", "tag": "link", "regex": "normalize.css", "website": "https://necolas.github.io/normalize.css/", "url": "https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.css" },
       { "name": "Skeleton", "active": false, "type": "css", "tag": "link", "regex": "skeleton.min.css", "website": "http://getskeleton.com/", "url": "https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" },       
-      { "name": "MaterialJS", "active": true, "type": "js", "tag": "script", "regex": "materialize.min.js", "website": "http://materializecss.com/", "url": "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js" },
-      { "name": "MaterialCSS", "active": true, "type": "css", "tag": "link", "regex": "materialize.min.css", "website": "http://materializecss.com/", "url": "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" },
-      { "name": "Material+Icons", "active": true, "type": "css", "tag": "link", "regex": "material+icons", "website": "https://material.io/icons/", "url": "https://fonts.googleapis.com/icon?family=Material+Icons" },
+      { "name": "MaterialJS", "active": false, "type": "js", "tag": "script", "regex": "materialize/1.0.0-beta", "website": "http://materializecss.com/", "url": "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js" },
+      { "name": "MaterialCSS", "active": false, "type": "css", "tag": "link", "regex": "materialize/1.0.0-beta", "website": "http://materializecss.com/", "url": "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css" },
+      { "name": "Material+Icons", "active": false, "type": "css", "tag": "link", "regex": "icons", "website": "https://material.io/icons/", "url": "https://fonts.googleapis.com/icon?family=Material+Icons" },
       { "name": "pureBase", "active": false, "type": "css", "tag": "link", "regex": "base-min.css", "website": "https://purecss.io/", "url": "https://unpkg.com/purecss@1.0.0/build/base-min.css" },
       { "name": "pureButtons", "active": false, "type": "css", "tag": "link", "regex": "buttons-min.css", "website": "https://purecss.io/", "url": "https://unpkg.com/purecss@1.0.0/build/buttons-min.css" },
       { "name": "pureForms", "active": false, "type": "css", "tag": "link", "regex": "forms-min.css", "website": "https://purecss.io/", "url": "https://unpkg.com/purecss@1.0.0/build/forms-min.css" },
@@ -112,9 +112,53 @@ const UI_Ctrl = (() => {
   return {
     addModal: () => {
       console.log(`TODO: ${ UI_Ctrl.addModal.name }`);
+      
+      let divModal = document.createElement('div');
+      // let divContent = document.createElement('div');
+
+      divModal.id = 'p-info-modal1';
+      divModal.classList.add('modal');
+
+      let divHeader = document.createElement('div');
+      let divFooter = document.createElement('div');
+      let divLecture = document.createElement('div');
+      let divNotes = document.createElement('div');
+
+      divModal.appendChild(divHeader);divModal.appendChild(divLecture);divModal.appendChild(divNotes);divModal.appendChild(divFooter);
+
+      
+
+
+      // divContent.classList.add('modal-content');
+      // divModal.innerHTML = `
+      //   <!-- Modal Structure -->
+      //     <div class="modal-content">
+      //       <h4>Modal Header</h4>
+      //       <p>A bunch of text</p>
+      //     </div>
+      //     <div class="modal-footer">
+      //       <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      //     </div>
+      // `;
+      // div.style = style;
+      // div.title = `Show Project Information`;
+
+      document.body.insertBefore(divModal, document.body.firstChild);
+    
     },
     addShowModalButton: () => {
-      console.log(`TODO: ${ UI_Ctrl.addShowModalButton.name }`);
+      let style = '';
+      let div = document.createElement('div');
+
+      style = `position: fixed; bottom: 0; right: 0; margin: 0em .5em 0em 0em; font-size: 1.5em; cursor: pointer;`;
+
+      div.id = 'p-show-modal';
+      div.innerHTML = `<a class="btn-floating btn-large waves-effect waves-light red modal-trigger" href="#p-info-modal1"><i class="material-icons">add</i></a>
+      `;
+      div.style = style;
+      div.title = `Show Project Information`;
+
+      document.body.insertBefore(div, document.body.firstChild);
     }
   }
 })();
@@ -123,9 +167,13 @@ const HTML_Ctrl = (() => {
   const compareFiles = (url, regex) => {
     // compare the url to the regex value
     
-    let xTemp = RegExp(xRegEx, 'i');
+    regex = regex.toLowerCase();
 
-    if(xTemp.test(xLink)) { return true } else { return false};
+    let xTemp = RegExp(regex, 'i');
+
+    url = url.toLowerCase();
+
+    if(xTemp.test(url.toLowerCase())) { return true } else { return false};
   };
 
   const createHTMLTag = (url, tag, type) => {
@@ -149,61 +197,58 @@ const HTML_Ctrl = (() => {
   // public methods
   return {
     addExternalFiles: () => {
+      let addToHTML = true;
+      let xTempArray = '';
+      let xTag = '';
       // get json data, only want files section
       let extFiles = JSON_Ctrl.getJSONData().files;
       // convert json to array
       extFiles = Object.keys((extFiles)).map((item) => { return extFiles[item] });
       // filter array for active items only
       extFiles = extFiles.filter(item => item.active === true);
-
-      console.log(extFiles);
-
-      // create an iterator and add files to html
-      let xIterator = (xArray) => {
-        let xCount = 0;
-        let xReturnValue = '';
-        let xComment = '';
-
-        return {
-          next: () => {
-            debugger
-            xCount++; // increment the counter
-
-            xReturnValue = `
-              Added To HTML: 
-              ${ xArray[xCount].name } 
-              ${ xArray[xCount].type }
-            `;
-
-            xComment = document.createComment(`
-              ${ xArray[xCount].name } 
-              ${ JSON_Ctrl.getJSONData().global.htmlComment }
-            `);
-
-            // append the comment to the head just above the new file
-            document.head.appendChild(xComment);
-
-            // add tag to html
-            document.head.appendChild(createHTMLTag(xArray[xCount].url, xArray[xCount].tag, xArray[xCount].type));
-
-            return xCount < xArray.length ? 
-            { value: xReturnValue, done: false } :{ value: undefined, done: true };
-          }
-        };
-      };
-
-      let xIteratorItem = xIterator(extFiles);
       
-      for(let item of extFiles) {
-        console.log(xIteratorItem.next());
-        JSON_Ctrl.setJSONData('notes', Utils_CTRL.guid(), `{
-          "type": "general", 
-          "name": "${ item.name }",
-          "value": "${ xIteratorItem.next() }"
-        }`);
-      };
+      extFiles.forEach(element => {
+        addToHTML = true;
+        
+        xTempArray = document.querySelectorAll(element.tag);
+        
+        xTempArray.forEach(item => {   
+          switch(element.tag.toLowerCase()) {
+            case 'link':
+              xTag = item.href;
+              break;
+            case 'script':
+              xTag = item.src;
+              break;
+          };
 
-      console.log(JSON_Ctrl.getJSONData());
+          // links found loop through them looking for a html
+          if (compareFiles(xTag, element.regex)) {
+            // yes reference already exists
+            xReturnValue = `NOT Added To HTML (already exists): ${ element.name }`;
+            // do not add to html
+            addToHTML = false;
+          };
+        });
+        
+        if (addToHTML) {
+          xReturnValue = `Added To HTML: ${ element.name } ${ element.type }`;
+  
+          xComment = document.createComment(`${ element.name } ${ JSON_Ctrl.getJSONData().global.htmlComment }`);
+  
+          // append the comment to the head just above the new file
+          document.head.appendChild(xComment);
+  
+          // add tag to html
+          document.head.appendChild(createHTMLTag(element.url, element.tag, element.type));
+        }
+        
+        JSON_Ctrl.setJSONData('notes', Utils_CTRL.guid(), `{
+          "type": "general",
+          "name": "${ element.name  }",
+          "value": "${ xReturnValue }"
+        }`);
+      });
     },
     addCSS: () => {
       let cssTag = document.createElement('style')
@@ -225,6 +270,13 @@ const HTML_Ctrl = (() => {
   
       scriptTag.innerHTML = `
         // ${ JSON_Ctrl.getJSONData().global.htmlComment }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          var elems = document.querySelectorAll('.modal');
+          var instances = M.Modal.init(elems);
+
+          M.toast({html: 'Project Information Loaded!!!', classes: 'rounded'});
+        });
       `;
   
       JSON_Ctrl.setJSONData('notes', Utils_CTRL.guid(), `{ 
@@ -261,9 +313,7 @@ const ProjectInformation = (() => {
       UI_Ctrl.addModal();
       UI_Ctrl.addShowModalButton();
 
-      HTML_Ctrl.addToast();
-
-      console.log(JSON_Ctrl.getJSONData());
+      // console.log(JSON_Ctrl.getJSONData());
       
       console.warn('LOADED projectInformation.js: ' + (performance.now() - startTime).toFixed(2) + 'ms'); 
     }

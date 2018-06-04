@@ -282,7 +282,10 @@ class ProjectInformation {
     
     for(let item of xExternalFiles) {
       // console.log(x_iteratorSearch.next()); // iterator
-      myApp.setJson('notes', myApp.guid(), `{  "type": "general", "name": "${ item.name }", "value": "${ xIteratorSearch.next().value }" }`);
+      myApp.setJson('notes', myApp.guid(), `{
+        "type": "general", 
+        "name": "${ item.name }", 
+        "value": "${ xIteratorSearch.next().value }" }`);
     };
   }
 
